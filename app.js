@@ -19,6 +19,8 @@ const articleSchema = {
 }
 const Article = mongoose.model("Article", articleSchema);
 
+
+// ######### Request Targeting all articles #########
 app.route("/articles")
 
     .get(async (req, res) => {
@@ -53,6 +55,33 @@ app.route("/articles")
             res.send(error);
         }
     })
+
+    .put(async function (req, res) {
+        try {
+            console.log("a");
+        } catch (err) {
+            console.log(err);
+        }
+    });
+
+// ######### Request Targeting a specific articles #########
+app.route("/articles/:articlesTitle")
+
+    .get(async function (req, res) {
+        try {
+            const foundArticles = Article.findOne({ title: req.params.articlesTitle });
+            if (foundArticles) {
+                res.send(foundArticles);
+            } else {
+                res.send("No articles mathing that title was found.");
+            }
+        } catch (err) {
+            console.log(err);
+            res.status(400).json({
+                message: "Something went wrong",
+            })
+        }
+    });
 
 
 app.listen(PORT, function () {
