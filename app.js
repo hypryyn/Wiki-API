@@ -65,25 +65,63 @@ app.route("/articles")
     });
 
 // ######### Request Targeting a specific articles #########
-app.route("/articles/:articlesTitle")
+app.route('/articles/:articleTitle')
+
+    // .get(async (req, res) => {
+    //     await Article.findOne({ title: req.params.articleTitle })
+    //     .then(foundArticle => {
+    //         if (foundArticle) {
+    //             res.send(foundArticle);
+    //         } else {
+    //             res.send("No articles matching that title was found.")
+    //         }
+    //     }).catch(err => {
+    //         console.log(err);
+    //     });
+    // });
 
     .get(async function (req, res) {
         try {
-            const foundArticles = Article.findOne({ title: req.params.articlesTitle });
-            if (foundArticles) {
-                res.send(foundArticles);
+            const foundArticle = await Article.findOne({ title: req.params.articleTitle });
+            if (foundArticle) {
+                res.send(foundArticle);
             } else {
-                res.send("No articles mathing that title was found.");
+                res.send('No articles matching that title was found.');
             }
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.log(error);
             res.status(400).json({
                 message: "Something went wrong",
-            })
+            });
         }
-    });
+    })
 
+    .put(async function (req, res) {
+        try {
+            const updatedArticle = await Article.replaceOne(
+                { title: req.params.articleTitle },
+                {
+                    title: req.body.title,
+                    content: req.body.content
+                },
+                { $set: req.body }
+            );
+            res.send({
+                message: "Article updated successfully for:",
+                title: req.body.title,
+                content: req.body.content
+            });
+
+        }  catch (error) {
+            console.log(error);
+            res.status(400).json({
+                message: "Can`t update article",
+            });
+        }
+    })
 
 app.listen(PORT, function () {
     console.log(`Server started on port ${PORT}`);
 });
+
+
