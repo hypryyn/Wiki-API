@@ -143,12 +143,27 @@ app.route('/articles/:articleTitle')
         }
     })
 
-    .delete(function (req, res) {
-        const requiredArticle = req.params.name;
-        Article.deleteOne({ title: requiredArticle }).then(function () {
-            res.send("successfully deleted an article!");
-        });
-    });
+    // .delete(function (req, res) {
+    //     const requiredArticle = req.params.name;
+    //     Article.deleteOne({ title: requiredArticle }).then(function () {
+    //         res.send("successfully deleted an article!");
+    //     });
+    // });
+
+    .delete(function(req,res){
+        removeOne();
+        async function removeOne() {
+            try{
+                await Article.deleteOne(
+                    {title:req.body.title},
+                ).then(
+                    res.send("Successfully deleted Article!")
+                )
+            }catch(err) {
+                console.log(err);
+            }
+        };
+     });
 
 app.listen(PORT, function () {
     console.log(`Server started on port ${PORT}`);
