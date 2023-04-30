@@ -118,7 +118,7 @@ app.route('/articles/:articleTitle')
                 message: "Can`t update article",
             });
         }
-    })
+    });
 
 app.listen(PORT, function () {
     console.log(`Server started on port ${PORT}`);
