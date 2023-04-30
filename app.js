@@ -112,13 +112,36 @@ app.route('/articles/:articleTitle')
                 content: req.body.content
             });
 
-        }  catch (error) {
+        } catch (error) {
             console.log(error);
             res.status(400).json({
                 message: "Can`t update article",
             });
         }
-    });
+    })
+
+    .patch(async function (req, res) {
+        try {
+            const updatedArticle = await Article.updateOne(
+                { title: req.params.articleTitle },
+                {
+                    title: req.body.title,
+                    content: req.body.content
+                },
+                { $set: req.body }
+            );
+            res.send({
+                message: "Article updated successfully for:",
+                title: req.body.title,
+                content: req.body.content
+            });
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({
+                message: "Can`t update article",
+            });
+        }
+    })
 
 app.listen(PORT, function () {
     console.log(`Server started on port ${PORT}`);
