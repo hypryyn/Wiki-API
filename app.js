@@ -30,17 +30,26 @@ app.get("/articles", async (req, res) => {
     }
 });
 
-app.post("/articles", async function(req, res) {
+app.post("/articles", async function (req, res) {
     try {
         const newArticle = new Article({
-          title: req.body.title,
-          content: req.body.content
+            title: req.body.title,
+            content: req.body.content
         });
         await newArticle.save();
         res.send("Successfully added a new article.");
-      } catch (error) {
+    } catch (error) {
         res.send(error);
-      }
+    }
+});
+
+app.delete("/articles", async function (req, res) {
+    try {
+        await Article.deleteMany({});
+        res.send("Successfully deleted all articles.");
+    } catch (error) {
+        res.send(error);
+    }
 });
 
 app.listen(PORT, function () {
