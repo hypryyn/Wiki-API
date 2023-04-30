@@ -19,38 +19,41 @@ const articleSchema = {
 }
 const Article = mongoose.model("Article", articleSchema);
 
-app.get("/articles", async (req, res) => {
-    try {
-        const foundArticles = await Article.find();
-        // console.log(foundArticles);
-        res.send(foundArticles);
-    } catch (err) {
-        // console.log(err);
-        res.send(err);
-    }
-});
+app.route("/articles")
 
-app.post("/articles", async function (req, res) {
-    try {
-        const newArticle = new Article({
-            title: req.body.title,
-            content: req.body.content
-        });
-        await newArticle.save();
-        res.send("Successfully added a new article.");
-    } catch (error) {
-        res.send(error);
-    }
-});
+    .get(async (req, res) => {
+        try {
+            const foundArticles = await Article.find();
+            // console.log(foundArticles);
+            res.send(foundArticles);
+        } catch (err) {
+            // console.log(err);
+            res.send(err);
+        }
+    })
 
-app.delete("/articles", async function (req, res) {
-    try {
-        await Article.deleteMany({});
-        res.send("Successfully deleted all articles.");
-    } catch (error) {
-        res.send(error);
-    }
-});
+    .post(async function (req, res) {
+        try {
+            const newArticle = new Article({
+                title: req.body.title,
+                content: req.body.content
+            });
+            await newArticle.save();
+            res.send("Successfully added a new article.");
+        } catch (error) {
+            res.send(error);
+        }
+    })
+
+    .delete(async function (req, res) {
+        try {
+            await Article.deleteMany({});
+            res.send("Successfully deleted all articles.");
+        } catch (error) {
+            res.send(error);
+        }
+    })
+
 
 app.listen(PORT, function () {
     console.log(`Server started on port ${PORT}`);
