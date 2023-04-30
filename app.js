@@ -19,17 +19,30 @@ const articleSchema = {
 }
 const Article = mongoose.model("Article", articleSchema);
 
-app.get("/articles", async(req,res)=>{
-    try{
-    const foundArticles= await Article.find();
+app.get("/articles", async (req, res) => {
+    try {
+        const foundArticles = await Article.find();
         // console.log(foundArticles);
         res.send(foundArticles);
-    }catch(err){
+    } catch (err) {
         // console.log(err);
         res.send(err);
     }
 });
 
-app.listen(PORT, function(){
+app.post("/articles", async function(req, res) {
+    try {
+        const newArticle = new Article({
+          title: req.body.title,
+          content: req.body.content
+        });
+        await newArticle.save();
+        res.send("Successfully added a new article.");
+      } catch (error) {
+        res.send(error);
+      }
+});
+
+app.listen(PORT, function () {
     console.log(`Server started on port ${PORT}`);
 });
