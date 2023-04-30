@@ -143,6 +143,13 @@ app.route('/articles/:articleTitle')
         }
     })
 
+    .delete(function (req, res) {
+        const requiredArticle = req.params.name;
+        Article.deleteOne({ title: requiredArticle }).then(function () {
+            res.send("successfully deleted an article!");
+        });
+    });
+
 app.listen(PORT, function () {
     console.log(`Server started on port ${PORT}`);
 });
